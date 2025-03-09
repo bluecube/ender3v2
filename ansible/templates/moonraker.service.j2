@@ -1,0 +1,20 @@
+[Unit]
+Description=API Server for Klipper
+Requires=network-online.target
+After=network-online.target
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=simple
+User={{ ansible_user }}
+SupplementaryGroups=moonraker-admin
+RemainAfterExit=yes
+WorkingDirectory=/home/{{ ansible_user }}/
+ExecStart=/home/{{ ansible_user }}/moonraker/venv/bin/python \
+  moonraker/moonraker/moonraker.py \
+    -d /home/{{ ansible_user }}/printer_data
+Restart=on-failure
+Restart=always
+RestartSec=10

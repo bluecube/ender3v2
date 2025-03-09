@@ -1,0 +1,70 @@
+---
+
+- name: Install dependencies
+  ansible.builtin.apt:
+    name:
+      - git
+      - python3
+      - python3-venv
+      - python3-dev
+      - build-essential
+      - libopenjp2-7
+      - libsodium-dev
+      - zlib1g-dev
+      - libjpeg-dev
+      - packagekit
+    state: present
+
+
+- name: Create directories
+  ansible.builtin.file:
+    path: "/home/{{ ansible_user }}/{{ item }}"
+    state: directory
+  loop:
+    - printer_data
+    - printer_data/gcodes
+    - printer_data/config
+    - printer_data/comms
+    - printer_data/logs
+  become: false
+
+- name: Clone repository
+  ansible.builtin.git:
+    repo: https://github.com/Arksine/moonraker.git
+    dest: /home/{{ ansible_user }}/moonraker
+    version: master
+  notify: Restart Moonraker service
+  become: false
+
+- name: Create virtualenv -- requirements
+  ansible.builtin.pip:
+    virtualenv: /home/{{ ansible_user }}/moonraker/venv
+    requirements: "/home/{{ ansible_user }}/moonraker/scripts/moonraker-requirements.txt"
+  notify: Restart Moonraker service
+  become: false
+
+- name: Create virtualenv -- speedups
+  ansible.builtin.pip:
+    virtualenv: /home/{{ ansible_user }}/moonraker/venv
+    requirements: "/home/{{ ansible_user }}/moonraker/scripts/moonraker-speedups.txt"
+  notify: Restart Moonraker service
+  become: false
+
+- name: Install moonraker.conf
+  ansible.builtin.copy:
+    src: "templates/moonraker.conf"
+    dest: /home/pi/printer_data/config/moonraker.conf
+  notify: Restart Moonraker service
+  become: false
+
+- name: Install service
+  ansible.builtin.template:
+    src: templates/moonraker.service.j2
+    dest: /etc/systemd/system/moonraker.service
+  notify: Restart Moonraker service
+
+- name: Enable service
+  ansible.builtin.systemd:
+    name: moonraker.service
+    state: started
+    enabled: true

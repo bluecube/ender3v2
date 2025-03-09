@@ -1,0 +1,5 @@
+ungrouped:
+  hosts:
+    enderstein:
+      ansible_user: pi
+      printer_cfg_path: ../klipper/printer.cfg

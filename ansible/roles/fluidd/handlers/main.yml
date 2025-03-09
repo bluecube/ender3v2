@@ -1,0 +1,4 @@
+- name: Reload Caddy config
+  ansible.builtin.systemd:
+    name: caddy.service
+    state: reloaded

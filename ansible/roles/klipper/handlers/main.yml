@@ -1,0 +1,5 @@
+- name: Restart Klipper service
+  ansible.builtin.systemd:
+    name: klipper.service
+    state: restarted
+    daemon_reload: true

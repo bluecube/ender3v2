@@ -1,0 +1,5 @@
+- name: Reboot system
+  ansible.builtin.reboot:
+    msg: "Rebooting to apply UART configuration changes."
+    pre_reboot_delay: 5
+    post_reboot_delay: 30

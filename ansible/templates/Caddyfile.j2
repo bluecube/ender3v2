@@ -1,0 +1,19 @@
+:80 {
+  @api {
+    path /server/*
+    path /printer/*
+    path /machine/*
+    path /files/*
+    path /access/*
+    path /websocket
+  }
+
+  handle {
+    root * /home/{{ ansible_user }}/fluidd
+    file_server
+  }
+
+  handle @api {
+    reverse_proxy localhost:7125
+  }
+}

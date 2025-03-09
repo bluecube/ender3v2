@@ -1,0 +1,21 @@
+[Unit]
+Description=Klipper 3D Printer Firmware
+After=network-online.target
+Wants=udev.target
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=simple
+User={{ ansible_user }}
+RemainAfterExit=yes
+WorkingDirectory=/home/{{ ansible_user }}/
+ExecStart=/home/{{ ansible_user }}/klipper/venv/bin/python \
+  klipper/klippy/klippy.py \
+    printer_data/config/printer.cfg \
+    -I printer_data/comms/klippy.serial \
+    -a printer_data/comms/klippy.sock \
+    -l printer_data/logs/klippy.log
+Restart=on-failure
+RestartSec=10

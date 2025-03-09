@@ -1,0 +1,8 @@
+- hosts: all
+  become: true
+  roles:
+    - common
+    - hardware_cfg
+    - klipper
+    - moonraker
+    - fluidd

@@ -1,0 +1,39 @@
+---
+- name: Raspi-config
+  ansible.builtin.shell: |
+    value="$(raspi-config nonint get_{{ item.0 }})"
+    echo "State before: $value"
+    if test "$value" -eq {{ item.1 }} ; then
+      echo "No change"
+      exit 254
+    else
+      echo "Changing..."
+      raspi-config nonint do_{{ item.0 }} {{ item.1 }}
+    fi
+  register: result
+  failed_when: result.rc != 0 and result.rc != 254
+  changed_when: result.rc != 254
+  loop:
+    - ["serial_hw", 0]
+    - ["serial_cons", 1]
+  notify: Reboot system
+
+- name: Disable hciuart service
+  ansible.builtin.systemd:
+    name: hciuart
+    enabled: false
+    state: stopped
+
+- name: Add disable-bt overlay to config.txt
+  ansible.builtin.lineinfile:
+    path: /boot/config.txt
+    regexp: '^dtoverlay=disable-bt'
+    line: 'dtoverlay=disable-bt'
+    state: present
+  notify: Reboot system
+
+- name: Add the user to group tty
+  ansible.builtin.user:
+    name: "{{ ansible_user }}"
+    groups: tty
+    append: true

@@ -1,0 +1,33 @@
+---
+
+- name: Install dependencies
+  ansible.builtin.apt:
+    name:
+      - unzip
+      - caddy
+    state: present
+
+- name: Create directory
+  ansible.builtin.file:
+    path: "/home/{{ ansible_user }}/fluidd"
+    state: directory
+  become: false
+
+- name: Install Fluidd
+  ansible.builtin.unarchive:
+    remote_src: true
+    src: https://github.com/fluidd-core/fluidd/releases/latest/download/fluidd.zip
+    dest: /home/{{ ansible_user }}/fluidd
+  become: false
+
+- name: Install Caddyfile
+  ansible.builtin.template:
+    src: templates/Caddyfile.j2
+    dest: /etc/caddy/Caddyfile
+  notify: Reload Caddy config
+
+- name: Enable Caddy service
+  ansible.builtin.systemd:
+    name: caddy.service
+    state: started
+    enabled: true
