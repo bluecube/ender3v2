@@ -1,0 +1,6 @@
+- name: Restart go2rtc service
+  ansible.builtin.systemd:
+    name: go2rtc.service
+    state: restarted
+    daemon_reload: true
+

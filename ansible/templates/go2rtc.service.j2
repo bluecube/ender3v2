@@ -1,0 +1,17 @@
+[Unit]
+Description=Go2RTC
+After=network-online.target
+Wants=udev.target
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=simple
+User={{ ansible_user }}
+WorkingDirectory=/home/{{ ansible_user }}/go2rtc
+ExecStart=/home/{{ ansible_user }}/go2rtc/go2rtc \
+    -c /home/{{ ansible_user }}/go2rtc/go2rtc.yaml
+Restart=on-failure
+RestartSec=10
+

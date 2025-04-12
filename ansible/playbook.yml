@@ -5,4 +5,5 @@
     - hardware_cfg
     - klipper
     - moonraker
+    - go2rtc
     - fluidd

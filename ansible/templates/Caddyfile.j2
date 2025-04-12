@@ -16,4 +16,8 @@
   handle @api {
     reverse_proxy localhost:7125
   }
+
+  handle_path /webrtc/* {
+    reverse_proxy localhost:1984
+  }
 }

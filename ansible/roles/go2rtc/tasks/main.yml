@@ -1,0 +1,34 @@
+---
+
+- name: Create directory
+  ansible.builtin.file:
+    path: "/home/{{ ansible_user }}/go2rtc"
+    state: directory
+  become: false
+
+- name: Install go2rtc
+  ansible.builtin.get_url:
+    url: https://github.com/AlexxIT/go2rtc/releases/latest/download/go2rtc_linux_arm64
+    dest: /home/{{ ansible_user }}/go2rtc/go2rtc
+    mode: a+x
+  notify: Restart go2rtc service
+  become: false
+
+- name: Install go2rtc.yaml
+  ansible.builtin.copy:
+    src: "templates/go2rtc.yaml"
+    dest: /home/{{ ansible_user }}/go2rtc/go2rtc.yaml
+  notify: Restart go2rtc service
+  become: false
+
+- name: Install service
+  ansible.builtin.template:
+    src: templates/go2rtc.service.j2
+    dest: /etc/systemd/system/go2rtc.service
+  notify: Restart go2rtc service
+
+- name: Enable service
+  ansible.builtin.systemd:
+    name: go2rtc.service
+    state: started
+    enabled: true

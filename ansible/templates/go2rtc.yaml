@@ -1,0 +1,14 @@
+streams:
+  bed_cam: v4l2:device?video=/dev/video0&input_format=h264&video_size=1920x1080&framerate=30
+
+webrtc:
+  listen: localhost:8555
+
+rtsp:
+  listen: localhost:8554
+
+srtp:
+  listen: localhost:8443
+
+api:
+  origin: "*"
