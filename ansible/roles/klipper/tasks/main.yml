@@ -39,7 +39,7 @@
 
 - name: Install printer.cfg
   ansible.builtin.copy:
-    src: "{{ printer_cfg_path }}"
+    src: "templates/printer.cfg"
     dest: /home/pi/printer_data/config/printer.cfg
   notify: Restart Klipper service
   become: false
