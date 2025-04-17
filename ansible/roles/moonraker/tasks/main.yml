@@ -15,6 +15,22 @@
       - packagekit
     state: present
 
+- name: Create the group moonraker-admin
+  ansible.builtin.group:
+    name: moonraker-admin
+    state: present
+
+- name: Add the user to group moonraker-admin
+  ansible.builtin.user:
+    name: "{{ ansible_user }}"
+    groups: moonraker-admin
+    append: true
+
+- name: Install polkit rules
+  ansible.builtin.copy:
+    src: "templates/moonraker.rules"
+    dest: "/usr/share/polkit-1/rules.d/moonraker.rules"
+  notify: Restart Moonraker service
 
 - name: Create directories
   ansible.builtin.file:
