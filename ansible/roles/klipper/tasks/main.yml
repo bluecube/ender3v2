@@ -5,9 +5,10 @@
     name:
       - git
       - python3
-      - python3-venv
+      - python3-virtualenv
       - python3-dev
       - build-essential
+      - libffi-dev
     state: present
 
 - name: Create directories

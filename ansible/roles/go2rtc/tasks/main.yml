@@ -1,5 +1,11 @@
 ---
 
+- name: Install dependencies
+  ansible.builtin.apt:
+    name:
+      - ffmpeg
+    state: present
+
 - name: Create directory
   ansible.builtin.file:
     path: "/home/{{ ansible_user }}/go2rtc"
