@@ -9,7 +9,6 @@ WantedBy=multi-user.target
 [Service]
 Type=simple
 User={{ ansible_user }}
-RemainAfterExit=yes
 WorkingDirectory=/home/{{ ansible_user }}/
 ExecStart=/home/{{ ansible_user }}/klipper/venv/bin/python \
   klipper/klippy/klippy.py \

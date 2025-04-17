@@ -69,7 +69,7 @@
 - name: Install moonraker.conf
   ansible.builtin.copy:
     src: "templates/moonraker.conf"
-    dest: /home/pi/printer_data/config/moonraker.conf
+    dest: /home/{{ ansible_user }}/printer_data/config/moonraker.conf
   notify: Restart Moonraker service
   become: false
 

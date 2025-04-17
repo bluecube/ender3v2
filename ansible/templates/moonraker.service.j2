@@ -10,7 +10,6 @@ WantedBy=multi-user.target
 Type=simple
 User={{ ansible_user }}
 SupplementaryGroups=moonraker-admin
-RemainAfterExit=yes
 WorkingDirectory=/home/{{ ansible_user }}/
 ExecStart=/home/{{ ansible_user }}/moonraker/venv/bin/python \
   moonraker/moonraker/moonraker.py \
