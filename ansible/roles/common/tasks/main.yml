@@ -27,4 +27,3 @@
     update_cache: true
     upgrade: full
     autoremove: true
-    
