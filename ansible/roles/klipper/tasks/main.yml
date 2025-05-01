@@ -38,6 +38,26 @@
   notify: Restart Klipper service
   become: false
 
+- name: Download saved config from the printer
+  ansible.builtin.slurp:
+    src: /home/{{ ansible_user }}/printer_data/config/printer.cfg
+  ignore_errors: true
+  register: remote_printer_cfg
+
+- name: Merge remote saved config
+  local_action:
+    module: ansible.builtin.command
+    argv:
+      - ./merge_klipper_config.py
+      - templates/printer.cfg
+    stdin: "{{ remote_printer_cfg['content'] | b64decode }}"
+  become: false
+  register: result
+  failed_when: result.rc != 0 and result.rc != 254
+  changed_when: result.rc != 254
+
+- debug: msg="{{ result.stdout }}"
+
 - name: Install printer.cfg
   ansible.builtin.copy:
     src: "templates/printer.cfg"
