@@ -61,14 +61,14 @@
 - name: Install printer.cfg
   ansible.builtin.copy:
     src: "templates/printer.cfg"
-    dest: /home/pi/printer_data/config/printer.cfg
+    dest: /home/{{ ansible_user }}/printer_data/config/printer.cfg
   notify: Restart Klipper service
   become: false
 
 - name: Install remaining config files
   ansible.builtin.copy:
     src: "{{ item }}"
-    dest: /home/pi/printer_data/config/{{ item | basename }}
+    dest: /home/{{ ansible_user }}/printer_data/config/{{ item | basename }}
   notify: Restart Klipper service
   become: false
   with_fileglob: 'templates/printer_*.cfg'
