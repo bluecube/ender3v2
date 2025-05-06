@@ -16,6 +16,8 @@ This repository contains/will contain things I needed for that.
 - Temperature controlled fan for the electronics
 - LED bar on the gantry
 - Webcam
+- Concrete paver as a base
+- No display, ethernet only
 
 ## Mods in progress
 - Cable chains
